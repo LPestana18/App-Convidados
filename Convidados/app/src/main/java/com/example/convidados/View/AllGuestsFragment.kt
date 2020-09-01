@@ -1,5 +1,6 @@
 package com.example.convidados.View
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.convidados.R
 import com.example.convidados.View.adapter.GuestAdapter
+import com.example.convidados.View.listener.GuestListener
 import com.example.convidados.ViewModel.AllGuestsViewModel
+import com.example.convidados.service.constants.GuestConstants
 
 class AllGuestsFragment : Fragment() {
 
     private lateinit var allGuestsViewModel: AllGuestsViewModel
     private val mAdapter: GuestAdapter = GuestAdapter()
+    private lateinit var mListener: GuestListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -34,10 +38,27 @@ class AllGuestsFragment : Fragment() {
         // 3 - Definir um adapter
         recycler.adapter = mAdapter
 
+        mListener = object: GuestListener{
+            override fun onClick(id: Int) {
+                val intent = Intent(context, GuestFormActivity::class.java)
+                val bundle = Bundle()
+                bundle.putInt(GuestConstants.GUESTID, id)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
+        }
+
+
+        mAdapter.attachListener(mListener)
         observer()
-        allGuestsViewModel.load()
 
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        allGuestsViewModel.load()
+
     }
 
     private fun observer() {
