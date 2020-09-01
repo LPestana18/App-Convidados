@@ -1,4 +1,4 @@
-package com.example.convidados.service
+package com.example.convidados.service.constants
 
 class DataBaseConstants {
 

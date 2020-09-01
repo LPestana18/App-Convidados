@@ -1,13 +1,17 @@
 package com.example.convidados.ViewModel
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.convidados.service.model.GuestModel
 import com.example.convidados.service.repository.GuestRepository
 
-class GuestFormViewModel : ViewModel() {
+class GuestFormViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mGuestRepository: GuestRepository = GuestRepository()
+    private val mContext = application.applicationContext
+    private val mGuestRepository: GuestRepository = GuestRepository.getInstance(mContext)
 
     private var mSaveGuest = MutableLiveData<Boolean>()
     val saveGuest = mSaveGuest
